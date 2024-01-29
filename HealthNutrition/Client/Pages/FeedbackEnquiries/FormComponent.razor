@@ -1,0 +1,50 @@
+﻿
+<EditForm Model="@feedbackenquiry" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled ="@Disabled">
+
+    <div class="form-group">
+        <label> FeedBack Topic: </label>
+        <div class="input-group">
+            <InputText @bind-Value="feedbackenquiry.FeedBackTopic" class="form-control" />
+            <ValidationMessage For="@(() => feedbackenquiry.FeedBackTopic)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> FeedBack Info: </label>
+        <div class="input-group">
+            <InputText @bind-Value="feedbackenquiry.FeedBackInfo" class="form-control" />
+            <ValidationMessage For="@(() => feedbackenquiry.FeedBackInfo)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> FeedBack Rating: </label>
+        <div class="input-group">
+            <InputText @bind-Value="feedbackenquiry.FeedBackRating" class="form-control" />
+            <ValidationMessage For="@(() => feedbackenquiry.FeedBackRating)" />
+        </div>
+    </div>
+    <br />
+    </fieldset>
+
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block" style="border: 3px solid white;">
+            @ButtonText
+        </button>
+    }
+
+    <BackToList Target="feedback&enquiries" />
+</EditForm>
+
+@code {
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public FeedBackEnquiry? feedbackenquiry { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

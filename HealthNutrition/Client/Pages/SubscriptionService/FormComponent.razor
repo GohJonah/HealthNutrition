@@ -1,0 +1,77 @@
+﻿<EditForm Model="@subscriptionplan" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled ="@Disabled">
+
+    <div class="form-group">
+        <label>Subscription Plan Name: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanName" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanName)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Image: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanImage" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanImage)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Info: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanInfo" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanInfo)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Item 1: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanItem1" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanItem1)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Item 2: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanItem2" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanItem2)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Price: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanPrice" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanPrice)" />
+        </div>
+    </div>
+    <br />
+    </fieldset>
+
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block" style="border: 3px solid white;">
+            @ButtonText
+        </button>
+    }
+
+    <BackToList Target="subscriptionplans" />
+
+</EditForm>
+
+@code {
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public SubscriptionPlan? subscriptionplan { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

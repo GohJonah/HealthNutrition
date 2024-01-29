@@ -1,0 +1,26 @@
+﻿@page "/feedback&enquiries/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Edit FeedBack</h1>
+<hr />
+<br />
+
+<FormComponent ButtonText="Update Changes" OnValidSubmit="EditFeedBackEnquiry" feedbackenquiry="feedbackenquiry"></FormComponent>
+
+@code {
+    [Parameter] public int id { get; set; }
+    FeedBackEnquiry feedbackenquiry = new FeedBackEnquiry();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        feedbackenquiry = await _client.GetFromJsonAsync<FeedBackEnquiry>($"{Endpoints.FeedBackEnquiriesEndpoint}/{id}");
+    }
+
+    async Task EditFeedBackEnquiry()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.FeedBackEnquiriesEndpoint}/{id}", feedbackenquiry);
+        _navManager.NavigateTo("/feedback&enquiries/");
+    }
+
+}

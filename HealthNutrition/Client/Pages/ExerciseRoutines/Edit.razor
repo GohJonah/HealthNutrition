@@ -1,0 +1,26 @@
+﻿@page "/exerciseroutines/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Edit Exercise</h1>
+<hr />
+<br />
+
+<FormComponent ButtonText="Update Changes" OnValidSubmit="EditExerciseRoutine" exerciseroutine="exerciseroutine"></FormComponent>
+
+@code {
+    [Parameter] public int id { get; set; }
+    ExerciseRoutine exerciseroutine = new ExerciseRoutine();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        exerciseroutine = await _client.GetFromJsonAsync<ExerciseRoutine>($"{Endpoints.ExerciseRoutinesEndpoint}/{id}");
+    }
+
+    async Task EditExerciseRoutine()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.ExerciseRoutinesEndpoint}/{id}", exerciseroutine);
+        _navManager.NavigateTo("/exerciseroutines/");
+    }
+
+}

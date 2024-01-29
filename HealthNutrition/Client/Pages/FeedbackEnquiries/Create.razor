@@ -1,0 +1,60 @@
+﻿@page "/feedback&enquiries/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Adding New FeedBack</h1>
+<hr />
+<br />
+
+
+@* <EditForm Model="@feedbackenquiry" OnValidSubmit="CreateFeedBackEnquiry">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label> FeedBack Topic: </label>
+        <div class="input-group">
+            <InputText @bind-Value="feedbackenquiry.FeedBackTopic" class="form-control" />
+            <ValidationMessage For="@(() => feedbackenquiry.FeedBackTopic)" />
+        </div>
+    </div>
+    <br/>
+
+    <div class="form-group">
+        <label> FeedBack Info: </label>
+        <div class="input-group">
+            <InputText @bind-Value="feedbackenquiry.FeedBackInfo" class="form-control" />
+            <ValidationMessage For="@(() => feedbackenquiry.FeedBackInfo)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> FeedBack Rating: </label>
+        <div class="input-group">
+            <InputText @bind-Value="feedbackenquiry.FeedBackRating" class="form-control" />
+            <ValidationMessage For="@(() => feedbackenquiry.FeedBackRating)" />
+        </div>
+    </div>
+    <br />
+
+    <button type="submit" class="btn btn-success btn-block">
+        Add FeedBack
+    </button>
+
+    <BackToList Target="feedback&enquiries" />
+
+</EditForm> *@
+
+<FormComponent ButtonText="Add FeedBack" feedbackenquiry="feedbackenquiry" OnValidSubmit="@CreateFeedBackEnquiry"></FormComponent>
+
+@code {
+    FeedBackEnquiry feedbackenquiry = new FeedBackEnquiry();
+
+    private async Task CreateFeedBackEnquiry()
+    {
+        await _client.PostAsJsonAsync(Endpoints.FeedBackEnquiriesEndpoint, feedbackenquiry);
+        _navManager.NavigateTo("/feedback&enquiries/");
+
+    }
+}

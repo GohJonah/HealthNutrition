@@ -1,0 +1,104 @@
+﻿@page "/paymentmethods/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Adding New Payment Method</h1>
+<hr />
+<br />
+
+@* <EditForm Model="@paymentmethod" OnValidSubmit="CreatePaymentMethod">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Subscription Plan: </label>
+        <div>
+            <InputSelect @bind-Value="paymentmethod.SubscriptionPlanId" class="form-control">
+                <option value=""> -- Select Subscription Plan --</option>
+                @if (SubscriptionPlans != null)
+                {
+                    foreach (var plan in SubscriptionPlans)
+                    {
+                        <option value="@plan.Id">@plan.SubscriptionPlanName</option>
+
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => paymentmethod.SubscriptionPlanId)" />
+        </div>
+    </div>
+    <br/>
+
+    <div class="form-group">
+        <label> Payment Type: </label>
+        <div class="input-group">
+            <InputText @bind-Value="paymentmethod.PaymentType" class="form-control" />
+            <ValidationMessage For="@(() => paymentmethod.PaymentType)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Card Number: </label>
+        <div class="input-group">
+            <InputText @bind-Value="paymentmethod.CardNumber" class="form-control" />
+            <ValidationMessage For="@(() => paymentmethod.CardNumber)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Expiry Date: </label>
+        <div class="input-group">
+            <InputText @bind-Value="paymentmethod.ExpiryDate" class="form-control" />
+            <ValidationMessage For="@(() => paymentmethod.ExpiryDate)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Security Code: </label>
+        <div class="input-group">
+            <InputText @bind-Value="paymentmethod.SecurityCode" class="form-control" />
+            <ValidationMessage For="@(() => paymentmethod.SecurityCode)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Email Address: </label>
+        <div class="input-group">
+            <InputText @bind-Value="paymentmethod.EmailAddress" class="form-control" />
+            <ValidationMessage For="@(() => paymentmethod.EmailAddress)" />
+        </div>
+    </div>
+    <br />
+
+    <button type="submit" class="btn btn-success btn-block">
+        Add Payment Method
+    </button>
+
+    <BackToList Target="paymentmethods" />
+
+</EditForm> *@
+
+<FormComponent ButtonText="Add Payment Method" paymentmethod="paymentmethod" OnValidSubmit="@CreatePaymentMethod"></FormComponent>
+
+@code {
+
+   PaymentMethod paymentmethod = new PaymentMethod();
+
+    private IList<SubscriptionPlan>? SubscriptionPlans;
+
+    protected async override Task OnInitializedAsync()
+    {
+        SubscriptionPlans = await _client.GetFromJsonAsync<List<SubscriptionPlan>>($"{Endpoints.SubscriptionPlansEndpoint}");
+    }
+
+    private async Task CreatePaymentMethod()
+    {
+        await _client.PostAsJsonAsync(Endpoints.PaymentMethodsEndpoint, paymentmethod);
+        _navManager.NavigateTo("/paymentmethods/");
+
+    }
+}

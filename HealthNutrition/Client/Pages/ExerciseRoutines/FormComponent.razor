@@ -1,0 +1,68 @@
+﻿
+<EditForm Model="@exerciseroutine" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled ="@Disabled">
+
+    <div class="form-group">
+        <label> Exercise Name: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExerciseName" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExerciseName)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Exercise Info: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExerciseInfo" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExerciseInfo)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Exercise Plan: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExercisePlan" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExercisePlan)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Exercise Image: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExerciseImage" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExerciseImage)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Exercise Video Link: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExerciseVideoLink" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExerciseVideoLink)" />
+        </div>
+    </div>
+    <br />
+    </fieldset>
+
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block" style="border: 3px solid white;">
+            @ButtonText
+        </button>
+    }
+
+    <BackToList Target="exerciseroutines" />
+</EditForm>
+
+@code {
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public ExerciseRoutine? exerciseroutine { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

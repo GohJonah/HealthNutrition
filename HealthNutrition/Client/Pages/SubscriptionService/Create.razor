@@ -1,0 +1,86 @@
+﻿@page "/subscriptionplans/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Adding New Plan</h1>
+<hr />
+<br />
+
+@* <EditForm Model="@subscriptionplan" OnValidSubmit="CreateSubscriptionPlan">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Subscription Plan Name: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanName" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanName)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Image: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanImage" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanImage)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Info: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanInfo" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanInfo)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Item 1: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanItem1" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanItem1)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Item 2: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanItem2" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanItem2)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label>Subscription Plan Price: </label>
+        <div class="input-group">
+            <InputText @bind-Value="subscriptionplan.SubscriptionPlanPrice" class="form-control" />
+            <ValidationMessage For="@(() => subscriptionplan.SubscriptionPlanPrice)" />
+        </div>
+    </div>
+    <br />
+
+    <button type="submit" class="btn btn-success btn-block">
+        Add Subscription Plan
+    </button>
+
+    <BackToList Target="subscriptionplans" />
+
+</EditForm> *@
+
+<FormComponent ButtonText="Add Subscription Plan" subscriptionplan="subscriptionplan" OnValidSubmit="@CreateSubscriptionPlan"></FormComponent>
+
+@code {
+    SubscriptionPlan subscriptionplan = new SubscriptionPlan();
+
+    private async Task CreateSubscriptionPlan()
+    {
+        await _client.PostAsJsonAsync(Endpoints.SubscriptionPlansEndpoint, subscriptionplan);
+        _navManager.NavigateTo("/subscriptionplans/");
+
+    }
+}

@@ -1,0 +1,18 @@
+﻿@page "/exerciseroutines/view/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1>View Exercise</h1>
+<br />
+
+<FormComponent exerciseroutine="exerciseroutine" Disabled="true" />
+
+@code {
+    [Parameter] public int id { get; set; }
+    ExerciseRoutine? exerciseroutine = new ExerciseRoutine();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        exerciseroutine = await _client.GetFromJsonAsync<ExerciseRoutine>($"{Endpoints.ExerciseRoutinesEndpoint}/{id}");
+    }
+}

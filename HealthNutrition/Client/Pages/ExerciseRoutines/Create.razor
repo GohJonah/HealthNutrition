@@ -1,0 +1,78 @@
+﻿@page "/exerciseroutines/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Adding New Exercise</h1>
+<hr />
+<br />
+
+@* <EditForm Model="@exerciseroutine" OnValidSubmit="CreateExerciseRoutine">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label> Exercise Name: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExerciseName" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExerciseName)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Exercise Info: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExerciseInfo" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExerciseInfo)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Exercise Plan: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExercisePlan" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExercisePlan)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Exercise Image: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExerciseImage" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExerciseImage)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Exercise Video Link: </label>
+        <div class="input-group">
+            <InputText @bind-Value="exerciseroutine.ExerciseVideoLink" class="form-control" />
+            <ValidationMessage For="@(() => exerciseroutine.ExerciseVideoLink)" />
+        </div>
+    </div>
+    <br />
+
+    <button type="submit" class="btn btn-success btn-block">
+        Add Exercise
+    </button>
+
+    <BackToList Target="exerciseroutines" />
+
+</EditForm> *@
+
+<FormComponent ButtonText="Add Exercise" exerciseroutine="exerciseroutine" OnValidSubmit="@CreateExerciseRoutine"></FormComponent>
+
+
+@code {
+    ExerciseRoutine exerciseroutine = new ExerciseRoutine();
+
+    private async Task CreateExerciseRoutine()
+    {
+        await _client.PostAsJsonAsync(Endpoints.ExerciseRoutinesEndpoint, exerciseroutine);
+        _navManager.NavigateTo("/exerciseroutines/");
+
+    }
+}

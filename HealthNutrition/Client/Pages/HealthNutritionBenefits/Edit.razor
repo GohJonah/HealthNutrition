@@ -1,0 +1,26 @@
+﻿@page "/healthnutritionbenefits/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Edit Information</h1>
+<hr />
+<br />
+
+<FormComponent ButtonText = "Update Changes" OnValidSubmit="EditHealthNutritionBenefit" healthnutritionbenefit = "healthnutritionbenefit"></FormComponent>
+
+@code {
+    [Parameter] public int id { get; set; }
+    HealthNutritionBenefit healthnutritionbenefit = new HealthNutritionBenefit();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        healthnutritionbenefit = await _client.GetFromJsonAsync<HealthNutritionBenefit>($"{Endpoints.HealthNutritionBenefitsEndpoint}/{id}");
+    }
+
+    async Task EditHealthNutritionBenefit()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.HealthNutritionBenefitsEndpoint}/{id}", healthnutritionbenefit);
+        _navManager.NavigateTo("/healthnutritionbenefits/");
+    }
+
+}

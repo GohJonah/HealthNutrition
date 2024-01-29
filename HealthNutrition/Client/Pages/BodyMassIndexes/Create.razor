@@ -1,0 +1,64 @@
+﻿@page "/bodymassindexes/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Adding New Body Mass Index (BMI)</h1>
+<hr />
+<br />
+
+@* <EditForm Model="@bodymassindex" OnValidSubmit="CreateBodyMassIndex">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label> Weight: </label>
+        <div class="input-group">
+            <InputNumber @bind-Value="bodymassindex.Weight" class="form-control" />
+            <ValidationMessage For="@(() => bodymassindex.Weight)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Height: </label>
+        <div class="input-group">
+            <InputNumber @bind-Value="bodymassindex.Height" class="form-control" />
+            <ValidationMessage For="@(() => bodymassindex.Height)" />
+        </div>
+    </div>
+    <br />
+
+    <button type="submit" class="btn btn-success btn-block">
+        Add Body Mass Index (BMI)
+    </button>
+
+    <BackToList Target="bodymassindexes" />
+
+</EditForm> *@
+
+<FormComponent ButtonText="Add Body Mass Index (BMI)" bodymassindex="bodymassindex" OnValidSubmit="@CreateBodyMassIndex"></FormComponent>
+
+@code {
+    BodyMassIndex bodymassindex = new BodyMassIndex();
+
+    private async Task CreateBodyMassIndex()
+    {
+        // Calculate BMI Based On Entered Height & Weight
+        bodymassindex.BMI = CalculateBMI(bodymassindex.Height, bodymassindex.Weight);
+
+        await _client.PostAsJsonAsync(Endpoints.BodyMassIndexesEndpoint, bodymassindex);
+        _navManager.NavigateTo("/bodymassindexes/");
+    }
+
+    // Code To Calculate Body Mass Index (BMI)
+    private double CalculateBMI(double? height, double? weight)
+    {
+        if (height.HasValue && weight.HasValue)
+        {
+            // BMI Formula: Weight (kg) / (Height (m) ^ 2)
+            return weight.Value / (height.Value * height.Value);
+        }
+
+        return 0; 
+    }
+}

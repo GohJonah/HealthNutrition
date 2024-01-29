@@ -1,0 +1,18 @@
+﻿@page "/healthnutritionbenefits/view/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1>View Information</h1>
+<br />
+
+<FormComponent healthnutritionbenefit="healthnutritionbenefit" Disabled="true" />
+
+@code {
+    [Parameter] public int id { get; set; }
+    HealthNutritionBenefit? healthnutritionbenefit = new HealthNutritionBenefit();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        healthnutritionbenefit = await _client.GetFromJsonAsync<HealthNutritionBenefit>($"{Endpoints.HealthNutritionBenefitsEndpoint}/{id}");
+    }
+}

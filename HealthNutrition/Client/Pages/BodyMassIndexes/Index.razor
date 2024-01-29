@@ -1,0 +1,109 @@
+﻿@page "/bodymassindexes"
+@inject HttpClient _client
+@inject HttpInterceptorService _interceptor
+@inject IJSRuntime js
+@implements IDisposable
+@attribute [Authorize]
+
+<h1 class="card-title">Body Mass Index Calculator</h1>
+<br />
+<p> Here's The Page Where You Can Calculate Your BMI By Providing Your Height & Weight & Also Some Related Information To Guide You</p>
+
+<a href="/bodymassindexes/create" class="btn btn-success" style="border: 3px solid white;">
+    <span class="oi oi-plus mr-2"></span>
+    Add New Body Mass Index (BMI)
+</a>
+<br />
+<br />
+
+@if (BodyMassIndexes == null)
+{
+    <div class=" alert alert-info">Loading BMIs...</div>
+}
+
+else
+{
+    <div class="row">
+        @foreach (var bmi in BodyMassIndexes)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card" style="background-color: transparent; border: 5px solid white;">
+                    <table>
+                        <tr style="text-align:left">
+                            <span>Personal Height:</span>
+                            <td>@bmi.Height <span>m</span></td>
+                        </tr>
+                        <tr style ="text-align:left">
+                            <span>Personal Weight:</span>
+                            <td>@bmi.Weight <span>kg</span></td>
+                        </tr>
+                        <tr style="text-align:left">
+                            @*This Code Helps To Display BMI In 1 Decimal Place*@
+                            <span>Calculated Body Mass Index (BMI):</span>
+                            <td><strong>@bmi.BMI?.ToString("F1")<span>kg/m2</span></strong></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="/bodymassindexes/view/@bmi.Id" class="btn btn-primary" style="border: 3px solid white;">
+                                    <span class="oi oi-book"></span>
+                                </a>
+
+                                <a href="/bodymassindexes/edit/@bmi.Id" class="btn btn-warning" style="border: 3px solid white;">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+
+                                <button class="btn btn-danger" style="border: 3px solid white;" @onclick="@(()=>Delete(bmi.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+        <table>
+            <tr>
+                <td>
+                    <img src="https://www.cdc.gov/healthyweight/images/assessing/bmi-adult-fb-600x315.jpg?_=07167" alt="BMI image" width="350" height="300">
+                </td>
+                <td>
+                    <img src="https://ch-api.healthhub.sg/api/public/content/4c183ce72f9f4b7c86e25e64cad40a51?v=ec148105" alt="BMI image" width="350" height="300">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <img src="https://images.drlogy.com/assets/uploads/img/admin/health_blog/obesity-symptoms.webp" alt="BMI image" width="800" height="500">
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+@code {
+    private List<BodyMassIndex>? BodyMassIndexes;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _interceptor.MonitorEvent();
+        BodyMassIndexes = await _client.GetFromJsonAsync<List<BodyMassIndex>>($"{Endpoints.BodyMassIndexesEndpoint}");
+    }
+
+    async Task Delete(int bodymassindexesId)
+    {
+        if (BodyMassIndexes != null)
+        {
+            var bodymassindex = BodyMassIndexes.First(q => q.Id == bodymassindexesId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do You Want To Delete {bodymassindex.BMI?.ToString("F1")}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.BodyMassIndexesEndpoint}/{bodymassindex.Id}");
+                await OnInitializedAsync();
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
+    }
+}

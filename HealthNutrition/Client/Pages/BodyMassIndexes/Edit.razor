@@ -1,0 +1,42 @@
+﻿@page "/bodymassindexes/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Edit Body Mass Index (BMI)</h1>
+<hr />
+<br />
+
+<FormComponent ButtonText="Update Changes" OnValidSubmit="EditBodyMassIndex" bodymassindex="bodymassindex"></FormComponent>
+
+@code {
+    [Parameter] public int id { get; set; }
+    BodyMassIndex bodymassindex = new BodyMassIndex();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        bodymassindex = await _client.GetFromJsonAsync<BodyMassIndex>($"{Endpoints.BodyMassIndexesEndpoint}/{id}");
+    }
+
+    async Task EditBodyMassIndex()
+    {
+        // Calculate BMI Based On Entered Height & Weight
+        bodymassindex.BMI = CalculateBMI(bodymassindex.Height, bodymassindex.Weight);
+
+        await _client.PutAsJsonAsync($"{Endpoints.BodyMassIndexesEndpoint}/{id}", bodymassindex);
+        _navManager.NavigateTo("/bodymassindexes/");
+    }
+
+    // Code To Calculate Body Mass Index (BMI)
+    private double CalculateBMI(double? height, double? weight)
+    {
+        if (height.HasValue && weight.HasValue)
+        {
+            // BMI Formula: Weight (kg) / (Height (m) ^ 2)
+            return weight.Value / (height.Value * height.Value);
+        }
+
+        return 0;
+    }
+
+
+}

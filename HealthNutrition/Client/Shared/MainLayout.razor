@@ -6,14 +6,6 @@
         <NavMenu />
     </div>
 
-    <!-- Code For Search Bar -->
-    <div class="search-bar">
-        <form action="/search" method="get">
-            <input type="text" name="query" placeholder="Search..." />
-            <button type="submit">Search</button>
-        </form>
-    </div>
-
     <main>
         <article class="content px-4">
             @Body
@@ -21,39 +13,3 @@
     </main>
 
 </div>
-
-
-<style>
-.search-bar 
-{
-    position: absolute;
-    top: 10px;
-    right: 50px;
-    background-image: url("https://miro.medium.com/v2/resize:fit:639/1*OxLoS8WYlye-FysYI92pSQ.jpeg"); /* Path To Image */
-    background-size: cover;
-    padding: 10px; /* Add Padding To Search Bar */
-    border-radius: 5px; /* Add Round Corners */
-}
-
-.search-bar input 
-{
-    width: 1000px;
-    height: 40px;
-    font-size: 16px;
-    border: 1px solid white; /* Add Border To Search Bar*/
-    background:transparent;
-    color:white;
-    padding: 5px; /* Add Padding To Search Input */
-}
-
-.search-bar button 
-{
-    height: 40px;
-    font-size: 16px;
-    border: 1px solid white;
-    background: transparent;
-    color: white; /* Colour For Search Button */
-    border-radius: 5px; /* Add Rounded Corners */
-    margin-left: 5px; /* Add Margin Between Input & Button */
-}
-</style>

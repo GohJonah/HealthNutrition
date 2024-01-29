@@ -1,0 +1,99 @@
+﻿@page "/exerciseroutines"
+@inject HttpClient _client
+@inject HttpInterceptorService _interceptor
+@inject IJSRuntime js
+@implements IDisposable
+@attribute [Authorize]
+
+<h1 class="card-title">Exercise Routines & Plans</h1>
+<br />
+<p>Here Are A Few Types Of Basic Exercises You Need To Do Atleast 3 Times Per Week To Train Your Body:</p>
+
+<a href="/exerciseroutines/create" class="btn btn-success" style="border: 3px solid white;">
+    <span class="oi oi-plus mr-2"></span>
+    Add New Exercise
+</a>
+<br />
+<br />
+
+@if (ExerciseRoutines == null)
+{
+    <div class=" alert alert-info">Loading Exercise...</div>
+}
+
+else
+{
+    <div class="row">
+        @foreach (var exercise in ExerciseRoutines)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card" style="background-color: transparent; border: 5px solid white;">
+                    <table>
+                        <tr>
+                            <td><img src="@exercise.ExerciseImage" alt="@exercise.ExerciseImage" width="350" height="300"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Link To Video:</span>
+                                <a href="@exercise.ExerciseVideoLink" target="_blank"><strong>Watch Video Here</strong></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>@exercise.ExerciseName</strong></td>
+                        </tr>
+                        <tr>
+                            <td>@exercise.ExerciseInfo</td>
+                        </tr>
+                        <tr>
+                            <td>@exercise.ExercisePlan</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="/exerciseroutines/view/@exercise.Id" class="btn btn-primary" style="border: 3px solid white;">
+                                    <span class="oi oi-book"></span>
+                                </a>
+
+                                <a href="/exerciseroutines/edit/@exercise.Id" class="btn btn-warning" style="border: 3px solid white;">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+
+                                <button class="btn btn-danger" style="border: 3px solid white;" @onclick="@(()=>Delete(exercise.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<ExerciseRoutine>? ExerciseRoutines;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _interceptor.MonitorEvent();
+        ExerciseRoutines = await _client.GetFromJsonAsync<List<ExerciseRoutine>>($"{Endpoints.ExerciseRoutinesEndpoint}");
+    }
+
+    async Task Delete(int exerciseroutineId)
+    {
+        if (ExerciseRoutines != null)
+        {
+            var exerciseroutine = ExerciseRoutines.First(q => q.Id == exerciseroutineId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do You Want To Delete {exerciseroutine.ExerciseName}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.ExerciseRoutinesEndpoint}/{exerciseroutine.Id}");
+                await OnInitializedAsync();
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
+    }
+}

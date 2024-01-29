@@ -1,0 +1,18 @@
+﻿@page "/feedback&enquiries/view/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1>View FeedBack</h1>
+<br />
+
+<FormComponent feedbackenquiry="feedbackenquiry" Disabled="true" />
+
+@code {
+    [Parameter] public int id { get; set; }
+    FeedBackEnquiry? feedbackenquiry = new FeedBackEnquiry();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        feedbackenquiry = await _client.GetFromJsonAsync<FeedBackEnquiry>($"{Endpoints.FeedBackEnquiriesEndpoint}/{id}");
+    }
+}

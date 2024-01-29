@@ -1,0 +1,99 @@
+﻿@page "/healthnutritionbenefits"
+@inject HttpClient _client
+@inject HttpInterceptorService _interceptor
+@inject IJSRuntime js
+@implements IDisposable
+@attribute [Authorize]
+
+<h1 class="card-title">Health & Nutrition Benefits</h1>
+<br />
+<p>Here Are A Few Types Of Food You Need To Eat Daily That Will Nourish Your Body With The Correct Vitamins & Minerals:</p>
+
+<a href="/healthnutritionbenefits/create" class="btn btn-success" style="border: 3px solid white;">
+    <span class="oi oi-plus mr-2"></span>
+    Add New Information
+</a>
+<br />
+<br />
+
+@if (HealthNutritionBenefits == null)
+{
+    <div class=" alert alert-info">Loading Benefits...</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var benefit in HealthNutritionBenefits)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card" style="background-color: transparent; border: 5px solid white;">
+                    <table>
+                        <tr>
+                            <td><img src="@benefit.NutrientImage" alt="@benefit.NutrientName" width="350" height="300"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>@benefit.NutrientName</strong></td>
+                        </tr>
+                        <tr>
+                            <td>@benefit.NutrientInfo</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Food Types:</strong>
+                                <ul style="vertical-align: top; text-align: left;">
+                                    <li>@benefit.NutrientFoodType1</li>
+                                    <li>@benefit.NutrientFoodType2</li>
+                                    <li>@benefit.NutrientFoodType3</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="/healthnutritionbenefits/view/@benefit.Id" class="btn btn-primary" style="border: 3px solid white;">
+                                    <span class="oi oi-book"></span>
+                                </a>
+
+                                <a href="/healthnutritionbenefits/edit/@benefit.Id" class="btn btn-warning" style="border: 3px solid white;">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+
+                                <button class="btn btn-danger" style="border: 3px solid white;" @onclick="@(()=>Delete(benefit.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<HealthNutritionBenefit>? HealthNutritionBenefits;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _interceptor.MonitorEvent();
+        HealthNutritionBenefits = await _client.GetFromJsonAsync<List<HealthNutritionBenefit>>($"{Endpoints.HealthNutritionBenefitsEndpoint}");
+    }
+
+    async Task Delete(int healthnutritionbenefitId)
+    {
+        if (HealthNutritionBenefits != null)
+        {
+            var healthnutritionbenefit = HealthNutritionBenefits.First(q => q.Id == healthnutritionbenefitId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do You Want To Delete {healthnutritionbenefit.NutrientName}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.HealthNutritionBenefitsEndpoint}/{healthnutritionbenefit.Id}");
+                await OnInitializedAsync();
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
+    }
+}

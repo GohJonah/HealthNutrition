@@ -1,0 +1,105 @@
+﻿@page "/feedback&enquiries"
+@inject HttpClient _client
+@inject HttpInterceptorService _interceptor
+@inject IJSRuntime js
+@implements IDisposable
+@attribute [Authorize]
+
+<h1 class="card-title">FeedBack & Enquiry</h1>
+<br />
+
+<a href="/feedback&enquiries/create" class="btn btn-success" style="border: 3px solid white;">
+    <span class="oi oi-plus mr-2"></span>
+    Add New FeedBack
+</a>
+<br />
+<br />
+
+@if (FeedBackEnquiries == null)
+{
+    <div class=" alert alert-info">Loading Reviews...</div>
+}
+
+else
+{
+    <div class="row">
+        @foreach (var feedback in FeedBackEnquiries)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card" style="background-color: transparent; border: 5px solid white;">
+                    <table>
+                        <tr>
+                            <td><strong>@feedback.FeedBackTopic</strong></td>
+                        </tr>
+                        <tr>
+                            <td>@feedback.FeedBackInfo</td>
+                        </tr>
+                        <tr>
+                            <td>@feedback.FeedBackRating</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="/feedback&enquiries/view/@feedback.Id" class="btn btn-primary" style="border: 3px solid white;">
+                                    <span class="oi oi-book"></span>
+                                </a>
+
+                                <a href="/feedback&enquiries/edit/@feedback.Id" class="btn btn-warning" style="border: 3px solid white;">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+
+                                <button class="btn btn-danger" style="border: 3px solid white;" @onclick="@(()=>Delete(feedback.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+        <table>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <img src="https://media.licdn.com/dms/image/C4E12AQH-9f0aXzNIUQ/article-cover_image-shrink_720_1280/0/1627240280682?e=2147483647&v=beta&t=SaJeIPLOYmhN9JWn_Tvx3i1y-qDRb5aJyp19VbMzNdc" alt="Feedback image" width="800" height="400">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5Chw1qaXNqr8zIP_iuByVd29cXdv7Ev_NSg&usqp=CAU" alt="Feedback image" width="500" height="200">
+                </td>
+                <td>
+                    <img src="https://www.seek.com.au/employer/hiring-advice/web_images/blogs/232/4705/2023.000_NOV-HAMI_Blog_ConstructiveFB_940x352C.jpg" alt="Feedback image" width="500" height="200">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+}
+
+@code {
+    private List<FeedBackEnquiry>? FeedBackEnquiries;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _interceptor.MonitorEvent();
+        FeedBackEnquiries = await _client.GetFromJsonAsync<List<FeedBackEnquiry>>($"{Endpoints.FeedBackEnquiriesEndpoint}");
+    }
+
+    async Task Delete(int feedbackenquiryId)
+    {
+        if (FeedBackEnquiries != null)
+        {
+            var feedbackenquiry = FeedBackEnquiries.First(q => q.Id == feedbackenquiryId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do You Want To Delete {feedbackenquiry.FeedBackTopic}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.FeedBackEnquiriesEndpoint}/{feedbackenquiry.Id}");
+                await OnInitializedAsync();
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
+    }
+}

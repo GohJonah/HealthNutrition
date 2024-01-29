@@ -1,0 +1,18 @@
+﻿@page "/bodymassindexes/view/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1>View Body Mass Index (BMI)</h1>
+<br />
+
+<FormComponent bodymassindex="bodymassindex" Disabled="true" />
+
+@code {
+    [Parameter] public int id { get; set; }
+    BodyMassIndex? bodymassindex = new BodyMassIndex();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        bodymassindex = await _client.GetFromJsonAsync<BodyMassIndex>($"{Endpoints.BodyMassIndexesEndpoint}/{id}");
+    }
+}

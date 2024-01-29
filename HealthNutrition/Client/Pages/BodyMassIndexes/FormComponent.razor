@@ -1,0 +1,41 @@
+﻿
+<EditForm Model="@bodymassindex" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled ="@Disabled">
+
+    <div class="form-group">
+        <label> Weight: </label>
+        <div class="input-group">
+            <InputNumber @bind-Value="bodymassindex.Weight" class="form-control" />
+            <ValidationMessage For="@(() => bodymassindex.Weight)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Height: </label>
+        <div class="input-group">
+            <InputNumber @bind-Value="bodymassindex.Height" class="form-control" />
+            <ValidationMessage For="@(() => bodymassindex.Height)" />
+        </div>
+    </div>
+    <br />
+    </fieldset>
+
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block" style="border: 3px solid white;">
+            @ButtonText
+        </button>
+    }
+
+    <BackToList Target="bodymassindexes" />
+</EditForm>
+
+@code {
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public BodyMassIndex? bodymassindex { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

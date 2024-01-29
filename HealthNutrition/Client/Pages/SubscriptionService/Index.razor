@@ -1,0 +1,102 @@
+﻿@page "/subscriptionplans"
+@inject HttpClient _client
+@inject HttpInterceptorService _interceptor
+@inject IJSRuntime js
+@implements IDisposable
+@attribute [Authorize]
+
+<h1 class="card-title">Subscription Plans</h1>
+<br />
+<p>Here Are A Few Subscription Plans That You Can Choose To Purchase:</p>
+
+<a href="/subscriptionplans/create" class="btn btn-success" style="border: 3px solid white;">
+    <span class="oi oi-plus mr-2"></span>
+    Add New Subscription Plan
+</a>
+<br />
+<br />
+
+@if (SubscriptionPlans == null)
+{
+    <div class=" alert alert-info">Loading Plans...</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var plan in SubscriptionPlans)
+        {
+            <div class="col-md-6 mb-6">
+                <div class="card" style="background-color: transparent; border: 5px solid white;">
+                    <table>
+                        <tr>
+                            <td><strong>@plan.SubscriptionPlanName</strong></td>
+                        </tr>
+                        <tr>
+                            <td><img src="@plan.SubscriptionPlanImage" alt="@plan.SubscriptionPlanName" width="500" height="300"></td>
+                        </tr>
+                        <tr>
+                            <td>@plan.SubscriptionPlanInfo</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Bundle Includes:</strong>
+                                <ul style="vertical-align: top; text-align: left;">
+                                    <li>@plan.SubscriptionPlanItem1</li>
+                                    <li>@plan.SubscriptionPlanItem2</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr style="text-align: center">
+                            <span><strong>Amount:</strong></span>
+                            <tdstyle ="text-align: center">@plan.SubscriptionPlanPrice</tdstyle>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="/subscriptionplans/view/@plan.Id" class="btn btn-primary" style="border: 3px solid white;">
+                                    <span class="oi oi-book"></span>
+                                </a>
+
+                                <a href="/subscriptionplans/edit/@plan.Id" class="btn btn-warning" style="border: 3px solid white;">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+
+                                <button class="btn btn-danger" style="border: 3px solid white;" @onclick="@(()=>Delete(plan.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<SubscriptionPlan>? SubscriptionPlans;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _interceptor.MonitorEvent();
+        SubscriptionPlans = await _client.GetFromJsonAsync<List<SubscriptionPlan>>($"{Endpoints.SubscriptionPlansEndpoint}");
+    }
+
+    async Task Delete(int subscriptionplanId)
+    {
+        if (SubscriptionPlans != null)
+        {
+            var subscriptionplan = SubscriptionPlans.First(q => q.Id == subscriptionplanId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do You Want To Delete {subscriptionplan.SubscriptionPlanName}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.SubscriptionPlansEndpoint}/{subscriptionplan.Id}");
+                await OnInitializedAsync();
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
+    }
+}

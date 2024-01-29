@@ -1,0 +1,26 @@
+﻿@page "/subscriptionplans/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Edit Subscription Plan</h1>
+<hr />
+<br />
+
+<FormComponent ButtonText="Update Changes" OnValidSubmit="EditSubscriptionPlan" subscriptionplan="subscriptionplan"></FormComponent>
+
+@code {
+    [Parameter] public int id { get; set; }
+    SubscriptionPlan subscriptionplan = new SubscriptionPlan();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        subscriptionplan = await _client.GetFromJsonAsync<SubscriptionPlan>($"{Endpoints.SubscriptionPlansEndpoint}/{id}");
+    }
+
+    async Task EditSubscriptionPlan()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.SubscriptionPlansEndpoint}/{id}", subscriptionplan);
+        _navManager.NavigateTo("/subscriptionplans/");
+    }
+
+}

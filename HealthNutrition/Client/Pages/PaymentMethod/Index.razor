@@ -1,0 +1,101 @@
+﻿@page "/paymentmethods"
+@inject HttpClient _client
+@inject HttpInterceptorService _interceptor
+@inject IJSRuntime js
+@implements IDisposable
+@attribute [Authorize]
+
+<h1 class="card-title">Payment Methods</h1>
+<br />
+
+<a href="/paymentmethods/create" class="btn btn-success" style="border: 3px solid white;">
+    <span class="oi oi-plus mr-2"></span>
+    Add New Payment Method
+</a>
+<br />
+<br />
+
+@if (PaymentMethods == null)
+{
+    <div class=" alert alert-info">Loading Methods...</div>
+}
+
+else
+{
+    <table class=" table table-responsive" id="paymentsTable">
+        <thead>
+            <tr style="color: white;">
+                <th>Subscription Plan</th>
+                <th>Payment Type</th>
+                <th>Card Number</th>
+                <th>Expiry Date</th>
+                <th>Security Code</th>
+                <th>Email Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pay in PaymentMethods)
+            {
+                <tr style="color: white;"> 
+                    <td>@pay.SubscriptionPlan.SubscriptionPlanName</td>
+                    <td>@pay.PaymentType</td>
+                    <td>@pay.CardNumber</td>
+                    <td>@pay.ExpiryDate</td>
+                    <td>@pay.SecurityCode</td>
+                    <td>@pay.EmailAddress</td>
+                    <td>
+                        <a href="/paymentmethods/view/@pay.Id" class="btn btn-primary" style="border: 3px solid white;">
+                            <span class="oi oi-book"></span>
+                        </a>
+
+                        <a href="/paymentmethods/edit/@pay.Id" class="btn btn-warning" style="border: 3px solid white;">
+                            <span class="oi oi-pencil"></span>
+                        </a>
+                        <button class="btn btn-danger" style="border: 3px solid white;" @onclick="@(()=>Delete(pay.Id))">
+                            <span class="oi oi-delete"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<PaymentMethod>? PaymentMethods;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _interceptor.MonitorEvent();
+        PaymentMethods = await _client.GetFromJsonAsync<List<PaymentMethod>>($"{Endpoints.PaymentMethodsEndpoint}");
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Add A Delay Before The Javascripts function to give underlying scripts & components more time to set up/load to ensure there's no error
+        await Task.Delay(1000);
+        await js.InvokeVoidAsync("AddDataTable", "#paymentsTable");
+    }
+
+    async Task Delete(int paymentmethodId)
+    {
+        if (PaymentMethods != null)
+        {
+            var paymentmethod = PaymentMethods.First(q => q.Id == paymentmethodId);
+            var confirm = await js.InvokeAsync<bool>("confirm", $"Do You Want To Delete {paymentmethod.PaymentType}?");
+            if (confirm)
+            {
+                await _client.DeleteAsync($"{Endpoints.PaymentMethodsEndpoint}/{paymentmethod.Id}");
+                await OnInitializedAsync();
+            }
+        }
+    }
+
+        public void Dispose()
+        {
+            _interceptor.DisposeEvent();
+            js.InvokeVoidAsync("DataTablesDispose", "#paymentsTable");
+        }
+}

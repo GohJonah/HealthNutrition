@@ -1,0 +1,78 @@
+﻿
+<EditForm Model="@healthnutritionbenefit" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled ="@Disabled">
+
+    <div class="form-group">
+        <label> Nutrient Name: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientName" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientName)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Nutrient Info: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientInfo" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientInfo)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Nutrient Food Type 1: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientFoodType1" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientFoodType1)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Nutrient Food Type 2: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientFoodType2" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientFoodType2)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Nutrient Food Type 3: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientFoodType3" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientFoodType3)" />
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label> Nutrient Image: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientImage" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientImage)" />
+        </div>
+    </div>
+    <br />
+    </fieldset>
+
+    @if (!Disabled)
+    {
+
+        <button type="submit" class="btn btn-success btn-block" style="border: 3px solid white;">
+            @ButtonText
+        </button>
+    }
+
+    <BackToList Target="healthnutritionbenefits" />
+</EditForm>
+
+@code {
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public HealthNutritionBenefit? healthnutritionbenefit { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

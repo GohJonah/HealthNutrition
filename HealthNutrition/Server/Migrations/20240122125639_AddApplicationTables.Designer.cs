@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace HealthNutrition.Server.Data.Migrations
+namespace HealthNutrition.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231208131518_AddedNameToUser")]
-    partial class AddedNameToUser
+    [Migration("20240122125639_AddApplicationTables")]
+    partial class AddApplicationTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -235,6 +235,312 @@ namespace HealthNutrition.Server.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "1939fbf3-3c15-423b-bf91-df2905a32589",
+                            Email = "admin@localhost.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@LOCALHOST.COM",
+                            NormalizedUserName = "ADMIN@LOCALHOST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAENTZK5F+rQqucOO2xJ/+xMVc0A+nRC3nOyaXToGgyN9Y4ZiSD8abhbf2yySk57w7Fg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "78cc2595-637f-4442-ae29-5f327378106a",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@localhost.com"
+                        });
+                });
+
+            modelBuilder.Entity("HealthNutrition.Shared.Domain.BodyMassIndex", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("BMI")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("Height")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Weight")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BodyMassIndexes");
+                });
+
+            modelBuilder.Entity("HealthNutrition.Shared.Domain.ExerciseRoutine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExerciseImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExerciseInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExerciseName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExercisePlan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExerciseVideoLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExerciseRoutines");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2024, 1, 22, 20, 56, 38, 942, DateTimeKind.Local).AddTicks(5224),
+                            DateUpdated = new DateTime(2024, 1, 22, 20, 56, 38, 942, DateTimeKind.Local).AddTicks(5225),
+                            ExerciseImage = "https://builtwithscience.com/wp-content/uploads/2023/02/how-to-squat-properly-perfect-squat-form1.webp",
+                            ExerciseInfo = "Squats Helps To Targets Your Thighs, Hamstrings, Glutes & Calves",
+                            ExerciseName = "Squats",
+                            ExercisePlan = "Daily: 10 - 15 Reps (x3 Sets)",
+                            ExerciseVideoLink = "https://www.youtube.com/watch?v=IB_icWRzi4E",
+                            UpdatedBy = "System"
+                        });
+                });
+
+            modelBuilder.Entity("HealthNutrition.Shared.Domain.FeedBackEnquiry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FeedBackInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FeedBackRating")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FeedBackTopic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FeedBackEnquiries");
+                });
+
+            modelBuilder.Entity("HealthNutrition.Shared.Domain.HealthNutritionBenefit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NutrientFoodType1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NutrientFoodType2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NutrientFoodType3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NutrientImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NutrientInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NutrientName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HealthNutritionBenefits");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2024, 1, 22, 20, 56, 38, 942, DateTimeKind.Local).AddTicks(4938),
+                            DateUpdated = new DateTime(2024, 1, 22, 20, 56, 38, 942, DateTimeKind.Local).AddTicks(4951),
+                            NutrientFoodType1 = "Leafy Green Vegetables(Kale, Broccoli)",
+                            NutrientFoodType2 = "Bright Colour Vegetables(Carrots, Bell Peppers)",
+                            NutrientFoodType3 = "Dairy Products(Egg, Milk)",
+                            NutrientImage = "https://img.freepik.com/premium-photo/carrot-table-background-fresh-sweet-carrots-cooking-food-fruits-vegetables-health-concept-baby-carrots-bunch-leaf_73523-8672.jpg",
+                            NutrientInfo = "Vitamin A is important for normal vision, the immune system, reproduction, and growth and development.Vitamin A also helps your heart, lungs, and other organs work properly.",
+                            NutrientName = "Vitamin A",
+                            UpdatedBy = "System"
+                        });
+                });
+
+            modelBuilder.Entity("HealthNutrition.Shared.Domain.PaymentMethod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CardNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExpiryDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SubscriptionPlanId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionPlanId");
+
+                    b.ToTable("PaymentMethods");
+                });
+
+            modelBuilder.Entity("HealthNutrition.Shared.Domain.SubscriptionPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SubscriptionPlanImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubscriptionPlanInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubscriptionPlanItem1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubscriptionPlanItem2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubscriptionPlanName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubscriptionPlanPrice")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubscriptionPlans");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2024, 1, 22, 20, 56, 38, 942, DateTimeKind.Local).AddTicks(5379),
+                            DateUpdated = new DateTime(2024, 1, 22, 20, 56, 38, 942, DateTimeKind.Local).AddTicks(5379),
+                            SubscriptionPlanImage = "https://cdn.textstudio.com/output/sample/normal/0/4/8/4/classic-logo-275-14840.png",
+                            SubscriptionPlanInfo = "Classic Weekly Bundle Mainly Includes Vouchers/Coupons Sufficient For A Week",
+                            SubscriptionPlanItem1 = "FairPrice Vouchers ($10 x 3)",
+                            SubscriptionPlanItem2 = "FoodPanda $5 Off Next 3 Orders Coupon (Ag100)",
+                            SubscriptionPlanName = "Classic Weekly Bundle",
+                            SubscriptionPlanPrice = "$35",
+                            UpdatedBy = "System"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -262,6 +568,20 @@ namespace HealthNutrition.Server.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "ad2bcf0c-20db-474f-8407-5a6b159518ba",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "bd2bcf0c-20db-474f-8407-5a6b159518bb",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -351,6 +671,13 @@ namespace HealthNutrition.Server.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "3781efa7-66dc-47f0-860f-e506d04102e4",
+                            RoleId = "ad2bcf0c-20db-474f-8407-5a6b159518ba"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -372,6 +699,15 @@ namespace HealthNutrition.Server.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("HealthNutrition.Shared.Domain.PaymentMethod", b =>
+                {
+                    b.HasOne("HealthNutrition.Shared.Domain.SubscriptionPlan", "SubscriptionPlan")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionPlanId");
+
+                    b.Navigation("SubscriptionPlan");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

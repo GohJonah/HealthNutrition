@@ -1,0 +1,86 @@
+﻿@page "/healthnutritionbenefits/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h1 class="card-title">Adding New Information</h1>
+<hr />
+<br />
+
+@* <EditForm Model="@healthnutritionbenefit" OnValidSubmit="CreateHealthNutritionBenefit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label> Nutrient Name: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientName" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientName)" />
+        </div>
+    </div>
+    <br/>
+
+    <div class="form-group">
+        <label> Nutrient Info: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientInfo" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientInfo)" />
+        </div>
+    </div>
+    <br/>
+
+    <div class="form-group">
+        <label> Nutrient Food Type 1: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientFoodType1" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientFoodType1)" />
+        </div>
+    </div>
+    <br/>
+
+    <div class="form-group">
+        <label> Nutrient Food Type 2: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientFoodType2" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientFoodType2)" />
+        </div>
+    </div>
+    <br/>
+
+    <div class="form-group">
+        <label> Nutrient Food Type 3: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientFoodType3" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientFoodType3)" />
+        </div>
+    </div>
+    <br/>
+
+    <div class="form-group">
+        <label> Nutrient Image: </label>
+        <div class="input-group">
+            <InputText @bind-Value="healthnutritionbenefit.NutrientImage" class="form-control" />
+            <ValidationMessage For="@(() => healthnutritionbenefit.NutrientImage)" />
+        </div>
+    </div>
+    <br/>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Add Information
+    </button>
+
+    <BackToList Target="healthnutritionbenefits" />
+
+</EditForm> *@
+
+<FormComponent ButtonText="Add Information" healthnutritionbenefit="healthnutritionbenefit" OnValidSubmit="@CreateHealthNutritionBenefit"></FormComponent>
+
+@code {
+    HealthNutritionBenefit healthnutritionbenefit = new HealthNutritionBenefit();
+
+    private async Task CreateHealthNutritionBenefit()
+    {
+        await _client.PostAsJsonAsync(Endpoints.HealthNutritionBenefitsEndpoint, healthnutritionbenefit);
+        _navManager.NavigateTo("/healthnutritionbenefits/");
+
+    }
+}
