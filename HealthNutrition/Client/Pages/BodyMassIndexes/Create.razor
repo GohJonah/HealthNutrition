@@ -43,7 +43,7 @@
 
     private async Task CreateBodyMassIndex()
     {
-        // Calculate BMI Based On Entered Height & Weight
+        // Assigned Calculation From Method Called To object of the BMI Attribute
         bodymassindex.BMI = CalculateBMI(bodymassindex.Height, bodymassindex.Weight);
 
         await _client.PostAsJsonAsync(Endpoints.BodyMassIndexesEndpoint, bodymassindex);
@@ -51,14 +51,19 @@
     }
 
     // Code To Calculate Body Mass Index (BMI)
+    // Set A Private Double Method Called CalculateBMI With 2 Double Parameters
+    // Set ? Which Means That The Parameters Can Either Have Value/Null
     private double CalculateBMI(double? height, double? weight)
     {
+        // Ensure both Parameters Have Values Before Proceeding With Calculation
         if (height.HasValue && weight.HasValue)
         {
             // BMI Formula: Weight (kg) / (Height (m) ^ 2)
             return weight.Value / (height.Value * height.Value);
         }
 
-        return 0; 
+        // Return 0 If Either Parameter Is Null
+        return 0;
+
     }
 }

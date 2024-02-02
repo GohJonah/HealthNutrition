@@ -58,6 +58,19 @@ else
                             </td>
                         </tr>
                     </table>
+                    @if (bmi.BMI < 18.5 || bmi.BMI > 25)
+                    {
+                            <tr colspan="2" class="text-center">
+                                <button class="btn btn-success" style="border: 3px solid white" @onclick="@(() => ShowRecommendations(bmi))">Recommendation List:</button>
+                            </tr>
+
+                    }
+                    else if (bmi.BMI > 18.5 || bmi.BMI < 24.9)
+                    {
+                        <div class="text-center">
+                            <button class="btn btn-success" style="border: 3px solid white" @onclick="ShowHealthyMessage">Recommendation List:</button>
+                        </div>
+                    }
                 </div>
             </div>
         }
@@ -77,10 +90,59 @@ else
             </tr>
         </table>
     </div>
+    @if (ShowRecommendationPopup)
+    {
+        // Create A Modal Pop Up Window
+        <div class="modal" tabindex="-1" style="display: block; backdrop-filter: blur(5px);">
+            <div class="modal-dialog">
+                <div class="modal-content" style="background-color: black; color: white;">
+                    @*Add A Header To The Pop Up Window*@
+                     <div class="modal-header">
+                        <h5 class="modal-title" style="text-align: center; color:white">Recommendation Tips:</h5>
+
+                        @*Set A Close Button To Close The PopUp*@
+                        <button type="button" class="close" @onclick="@(() => ShowRecommendationPopup = false)" style="background-color: red; border: 3px solid white;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    @*Set A Modal Body To Store Whatever Content Needed*@
+                    <div class="modal-body" style="text-align: center; color: white;">
+                        <img src="https://i.pinimg.com/736x/92/37/27/9237272b44ee8ac90297673bcb5e9fc1.jpg" alt="Recommendation" width="450" height="400"> 
+                        <p>Your BMI Is Unhealthy. Here Are Some Tips For You:</p>
+                        <ul style=" text-align: left;">
+                            <li>Eat Healthy Food</li>
+                            <li>Stay Away From Junk Food & Late-Night Snakcs</li>
+                            <li>Exercise At Least 30 Minutes 3 Times Per Week</li>
+                        </ul>
+
+                        @*Add Two Buttons In The PopUps & Navigate To Their Respective Output*@
+                        <p>For More Info, Please Visit...</p>
+                        <div style="margin-bottom: 10px;">
+                            <a href="/healthnutritionbenefits" class="btn btn-outline-secondary" style="background-color: black; color: white; border: 3px solid white;">Go to Health & Nutrition Benefits Page</a>
+                        </div>
+
+                        <div>
+                            <a href="/exerciseroutines" class="btn btn-secondary" style="background-color: black; color: white; border: 3px solid white;">Go to Exercise Benefits Page</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 }
 
 @code {
     private List<BodyMassIndex>? BodyMassIndexes;
+
+    // Set Boolean Variable To False Because We Only Want To See The PopUp Through A Button
+    private bool ShowRecommendationPopup = false;
+
+    // Set String Variable To Hold The Content 
+    private string RecommendationsContent = "";
+
+    // Set Variable of Type BodyMassIndex To Hold Current BMI Value
+    private BodyMassIndex CurrentBMI;
 
     protected async override Task OnInitializedAsync()
     {
@@ -100,6 +162,23 @@ else
                 await OnInitializedAsync();
             }
         }
+    }
+
+    // Set A Method Such As When A Button is Clicked, This Function Is Called & User Is Able To VIew PopUp
+    async Task ShowRecommendations(BodyMassIndex bmi)
+    {
+        // Assigned Variable To Provided BMI (bmi)
+        CurrentBMI = bmi;
+
+        // Set Boolean Variable To True If This Method Is Called
+        ShowRecommendationPopup = true;
+    }
+
+    // Set A Method Such As When A Button is Clicked, Alert Message PopUps
+    private void ShowHealthyMessage()
+    {
+        // Display An Alert Message
+        js.InvokeVoidAsync("alert", "Your BMI Is In A Healthy Range! Keep It Up");
     }
 
     public void Dispose()
