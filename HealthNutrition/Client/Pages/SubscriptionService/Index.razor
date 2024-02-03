@@ -16,6 +16,17 @@
 <br />
 <br />
 
+@*Call SearchSubscriptionPlan Method Whenever Something Is Typed Into Search Bar*@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <Input @oninput="SearchSubscriptionPlan" placeholder="Search Subscription Plan..." class="form-control" style="background-color:transparent; border: 5px solid white; color:white;" />
+        </div>
+    </div>
+</div>
+<br />
+
+
 @if (SubscriptionPlans == null)
 {
     <div class=" alert alert-info">Loading Plans...</div>
@@ -79,6 +90,30 @@ else
     {
         _interceptor.MonitorEvent();
         SubscriptionPlans = await _client.GetFromJsonAsync<List<SubscriptionPlan>>($"{Endpoints.SubscriptionPlansEndpoint}");
+    }
+
+    /*Create SearchSubscriptionPlan As A Method To Search For Subscription Plan*/
+    public async void SearchSubscriptionPlan(ChangeEventArgs args)
+    {
+        // Store Typed Value Into SearchName
+        var SearchName = (string)args.Value;
+
+        // Retrieve List From API End Point
+        SubscriptionPlans = await _client.GetFromJsonAsync<List<SubscriptionPlan>>($"{Endpoints.SubscriptionPlansEndpoint}");
+
+        // If Search Bar Is Empty, Retrieve Full List From API End Point
+        if (string.IsNullOrWhiteSpace(SearchName))
+        {
+            SubscriptionPlans = await _client.GetFromJsonAsync<List<SubscriptionPlan>>($"{Endpoints.SubscriptionPlansEndpoint}");
+        }
+
+        // If There's Value Typed In, Filter List To Include Results That Has Search String & Ignore Any Casing, Then Display Results In Descending Order
+        else
+        {
+            SubscriptionPlans = SubscriptionPlans.Where(x => x.SubscriptionPlanName.Contains(SearchName, StringComparison.OrdinalIgnoreCase)).OrderByDescending(x => x.Id).ToList();
+        }
+
+        StateHasChanged();
     }
 
     async Task Delete(int subscriptionplanId)

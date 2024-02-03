@@ -16,6 +16,16 @@
 <br />
 <br />
 
+@*Call SearchExercise Method Whenever Something Is Typed Into Search Bar*@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <Input @oninput="SearchExercise" placeholder="Search Exercise..." class="form-control" style="background-color:transparent; border: 5px solid white; color:white;" />
+        </div>
+    </div>
+</div>
+<br />
+
 @if (ExerciseRoutines == null)
 {
     <div class=" alert alert-info">Loading Exercise...</div>
@@ -76,6 +86,30 @@ else
     {
         _interceptor.MonitorEvent();
         ExerciseRoutines = await _client.GetFromJsonAsync<List<ExerciseRoutine>>($"{Endpoints.ExerciseRoutinesEndpoint}");
+    }
+
+    /*Create SearchExercise As A Method To Search For Exercise*/
+    public async void SearchExercise(ChangeEventArgs args)
+    {
+        // Store Typed Value Into SearchName
+        var SearchName = (string)args.Value;
+
+        // Retrieve List From API End Point
+        ExerciseRoutines = await _client.GetFromJsonAsync<List<ExerciseRoutine>>($"{Endpoints.ExerciseRoutinesEndpoint}");
+
+        // If Search Bar Is Empty, Retrieve Full List From API End Point
+        if (string.IsNullOrWhiteSpace(SearchName))
+        {
+            ExerciseRoutines = await _client.GetFromJsonAsync<List<ExerciseRoutine>>($"{Endpoints.ExerciseRoutinesEndpoint}");
+        }
+
+        // If There's Value Typed In, Filter List To Include Results That Has Search String & Ignore Any Casing, Then Display Results In Descending Order
+        else
+        {
+            ExerciseRoutines = ExerciseRoutines.Where(x => x.ExerciseName.Contains(SearchName, StringComparison.OrdinalIgnoreCase)).OrderByDescending(x => x.Id).ToList();
+        }
+
+        StateHasChanged();
     }
 
     async Task Delete(int exerciseroutineId)
