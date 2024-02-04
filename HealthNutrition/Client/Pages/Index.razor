@@ -1,57 +1,62 @@
 ﻿@page "/"
 <!-- Code For Intro-->
-<div class="intro" style=" border: 3px solid white;">
+<div class="intro">
     <header>
         <PageTitle>Index</PageTitle>
         <h1>H&N</h1>
     </header>
 
-    <p class="Welcome-Line"> Welcome to Health & Nutrition.</p>
-    <hr/>
-
-    <p class="About-Us"> About Us </p>
-    Health & Nutrition Pte Ltd is a company that mainly focuses on information about healthy eating/diet, food proportion, counting calories/macros
-    and introducing some of the food people should/should not eat. Due to an increase in the workforce industry, most working adults tend to neglect
-    their health due to long working hours, and often end up facing some problems in their health due to a lack of adapting healthy eating into their
-    lifestyle. Hence, H&N hopes to help these people to improvise their lifestyle by helping them to learn more about the goods and stay away from
-    the bads which will hopefully convince them to adapt to a healthy lifestyle.
-
-    <br />
-    <br />
-
-    <p class="Goal-Line"> Our Goal & Vision </p>
-    H&N Helps You To Manage Your Health, Diet & LifeStyle <br />
-    Don't Think About Living Healthily, <br />
-    Think That You Are Changing The Way You Live, Feel & Look
-
-    <br />
-    <br />
-
-    <p class="Contact-Line"> Contact Us </p>
-    Email Address: H&N@gmail.com <br />
-    H&N Hotline: +65 6557 3768 (24-Hour)<br />
-
-    <hr/>
+    <p class="Welcome-Line" style="font-size: 24px;"> Welcome to Health & Nutrition</p>
+    <hr />
 </div>
 
+<div id="imagesCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#imagesCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#imagesCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#imagesCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
 
- <style>
-    .intro 
-    {
-        background-size: cover;
-        background-position: center;
-        padding: 20px; /* Padding Added For Aesthetics */
-        text-align: center;
-    }
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://www.events.unsw.edu.au/sites/default/files/styles/event_header_image/public/2022-06/Untitled%20design%20%2813%29_0.jpg?itok=aZOu0V_i" width="1150" height="550" alt="image1">
+            <div class="carousel-caption d-none d-md-block">
+                <h1>Be Healthy</h1>
+                <p>
+                    Change The Way You Live, Feel & Look <br/>
+                    It's Never Too Late - Start Your Journey With Health & Nutrition To Better Health Today!
+                </p>
+            </div>
+        </div>
 
-    .Welcome-Line 
-    {
-        font-size: 24px;
-    }
+        <div class="carousel-item">
+            <img src="https://images-ext-2.discordapp.net/external/sLI9n2H-KDOvvzMy8ujcEmYRXav9YKDvENEsPRk2wwM/https/barbend.com/wp-content/uploads/2023/10/7_1362113555.jpg?format=webp&width=1190&height=669" width="1150" height="550" alt="image2">
+            <div class="carousel-caption d-none d-md-block" style="text-align:center; justify-content: flex-start; height: 95%;">
+                <h1>Be Active</h1>
+                <p>
+                    Change The Way You Live, Feel & Look <br />
+                    It's Never Too Late - Start Your Journey Health & Nutrition To Better Health Today!
+                </p>
+            </div>
+        </div>
 
-    .About-Us, .Goal-Line, .Contact-Line
-    {
-        text-decoration: underline;
-        font-size: 24px;
-    }
-</style> 
+        <div class="carousel-item">
+            <img src="https://static.vecteezy.com/system/resources/previews/027/833/381/large_2x/healthy-eating-concept-fresh-vegetable-salad-in-bowl-on-black-background-bowls-of-healthy-food-on-black-background-healthy-eating-concept-ai-generated-free-photo.jpg" width="1150" height="550" alt="image3">
+            <div class="carousel-caption d-none d-md-block" style="text-align:center; justify-content: flex-start; height: 95%;">
+                <h1>Be Strong</h1>
+                <p>
+                    Change The Way You Live, Feel & Look <br />
+                    It's Never Too Late - Start Your Journey Health & Nutrition To Better Health Today!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#imagesCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#imagesCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+</div>
